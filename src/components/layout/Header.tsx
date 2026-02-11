@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Hourglass, Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-export default function Header() {
+interface HeaderProps {
+  onBook: () => void;
+}
+
+export default function Header({ onBook }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -27,17 +32,20 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#destinations" className="text-gray-300 hover:text-gold-500 transition-colors">Destinations</a>
-          <a href="#about" className="text-gray-300 hover:text-gold-500 transition-colors">L'Agence</a>
-          <a href="#contact" className="text-gray-300 hover:text-gold-500 transition-colors">Contact</a>
-          <button className="px-6 py-2 bg-gold-500 hover:bg-gold-600 text-black font-bold rounded-full transition-all transform hover:scale-105">
+          <a href="#destinations" className="text-gray-300 hover:text-gold-500 transition-colors cursor-pointer">Destinations</a>
+          <a href="#quiz" className="text-gray-300 hover:text-gold-500 transition-colors cursor-pointer">Conseils</a>
+          <a href="#contact" className="text-gray-300 hover:text-gold-500 transition-colors cursor-pointer">Contact</a>
+          <button 
+            onClick={onBook}
+            className="px-6 py-2 bg-gold-500 hover:bg-gold-600 text-black font-bold rounded-full transition-all transform hover:scale-105 cursor-pointer"
+          >
             Réserver
           </button>
         </nav>
 
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden text-white"
+          className="md:hidden text-white cursor-pointer"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X /> : <Menu />}
@@ -45,16 +53,28 @@ export default function Header() {
       </div>
 
       {/* Mobile Nav */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-lg border-t border-white/10 p-4 flex flex-col gap-4">
-          <a href="#destinations" className="text-gray-300 hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>Destinations</a>
-          <a href="#about" className="text-gray-300 hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>L'Agence</a>
-          <a href="#contact" className="text-gray-300 hover:text-gold-500" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
-          <button className="w-full py-3 bg-gold-500 text-black font-bold rounded-lg">
-            Réserver
-          </button>
-        </div>
-      )}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-lg border-t border-white/10 overflow-hidden"
+          >
+            <div className="flex flex-col gap-4 p-6">
+              <a href="#destinations" className="text-lg text-gray-300 hover:text-gold-500 cursor-pointer" onClick={() => setIsMobileMenuOpen(false)}>Destinations</a>
+              <a href="#quiz" className="text-lg text-gray-300 hover:text-gold-500 cursor-pointer" onClick={() => setIsMobileMenuOpen(false)}>Conseils</a>
+              <a href="#contact" className="text-lg text-gray-300 hover:text-gold-500 cursor-pointer" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
+              <button 
+                onClick={() => { setIsMobileMenuOpen(false); onBook(); }}
+                className="w-full py-4 bg-gold-500 text-black font-bold rounded-xl mt-2 cursor-pointer"
+              >
+                Réserver mon voyage
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

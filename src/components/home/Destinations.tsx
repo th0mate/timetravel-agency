@@ -32,18 +32,22 @@ const destinations = [
   }
 ];
 
-export default function Destinations() {
+interface DestinationsProps {
+  onBook: (title: string) => void;
+}
+
+export default function Destinations({ onBook }: DestinationsProps) {
   return (
-    <section id="destinations" className="py-20 bg-neutral-950">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+    <section id="destinations" className="py-12 md:py-20 bg-neutral-950">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Destinations à la Une</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">
             Choisissez votre époque et laissez-vous transporter. Nos voyages sont conçus pour une immersion totale et sécurisée.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {destinations.map((dest, index) => (
             <motion.div
               key={dest.id}
@@ -82,8 +86,11 @@ export default function Destinations() {
                   {dest.description}
                 </p>
 
-                <button className="w-full py-3 bg-white/5 hover:bg-gold-500 hover:text-black text-white font-medium rounded-lg transition-all flex justify-center items-center gap-2">
-                  Voir les détails
+                <button 
+                  onClick={() => onBook(dest.title)}
+                  className="w-full py-3 bg-white/5 hover:bg-gold-500 hover:text-black text-white font-medium rounded-lg transition-all flex justify-center items-center gap-2 cursor-pointer"
+                >
+                  Voir les détails / Réserver
                 </button>
               </div>
             </motion.div>

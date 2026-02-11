@@ -2,7 +2,11 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
-export default function Hero() {
+interface HeroProps {
+  onBook: () => void;
+}
+
+export default function Hero({ onBook }: HeroProps) {
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image / Overlay */}
@@ -22,25 +26,31 @@ export default function Hero() {
           <span className="inline-block py-1 px-3 rounded-full bg-gold-500/20 text-gold-500 border border-gold-500/30 text-sm font-medium mb-6 backdrop-blur-sm">
             Voyagez à travers l'histoire
           </span>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-4xl md:text-7xl font-bold text-white mb-6 leading-tight">
             Explorez le Temps, <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-500 to-amber-200">
               Redécouvrez le Monde
             </span>
           </h1>
-          <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto px-4">
             TimeTravel Agency vous offre des expériences immersives inoubliables. 
             Paris 1889, la Renaissance ou l'ère des Dinosaures vous attendent.
           </p>
           
-          <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-            <button className="px-8 py-4 bg-gold-500 hover:bg-gold-600 text-black font-bold rounded-full transition-all flex items-center gap-2 group">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-6">
+            <button 
+              onClick={onBook}
+              className="px-8 py-4 bg-gold-500 hover:bg-gold-600 text-black font-bold rounded-full transition-all flex items-center gap-2 group cursor-pointer"
+            >
               Réserver votre voyage
               <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur-md transition-all border border-white/10">
+            <a 
+              href="#destinations"
+              className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur-md transition-all border border-white/10 cursor-pointer"
+            >
               En savoir plus
-            </button>
+            </a>
           </div>
         </motion.div>
       </div>

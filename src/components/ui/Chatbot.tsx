@@ -1,13 +1,39 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Mistral } from '@mistralai/mistralai';
+import ReactMarkdown from 'react-markdown';
+
+const apiKey = import.meta.env.VITE_MISTRAL_API_KEY || '';
+const client = apiKey ? new Mistral({ apiKey }) : null;
 
 type Message = {
   id: number;
   text: string;
   sender: 'user' | 'bot';
-  timestamp: Date;
 };
+
+const SYSTEM_PROMPT = `
+Tu es l'assistant virtuel de TimeTravel Agency, une agence de voyage temporel de luxe.
+Ton nom est Chronos.
+Ton rôle : conseiller les clients sur les meilleures destinations temporelles.
+
+Ton ton :
+- Professionnel mais chaleureux.
+- Passionné d'histoire.
+- Toujours enthousiaste sans être trop familier.
+- Expertise en voyage temporel (fictif mais crédible).
+
+Tes connaissances sur les destinations :
+1. Paris 1889 (Belle Époque, Tour Eiffel, Exposition Universelle). Prix: 2499€.
+2. Crétacé (-65M d'années, dinosaures, nature préhistorique). Prix: 3999€.
+3. Florence 1504 (Renaissance, art, Michel-Ange, Léonard de Vinci). Prix: 2899€.
+
+Instructions importantes :
+- Si on te demande le prix, invente des détails sur les services inclus (assurance paradoxe, tenue d'époque).
+- Tu peux suggérer une destination selon les intérêts du client (art -> Florence, aventure -> Crétacé, technologie -> Paris).
+- Reste concis dans tes réponses (max 3-4 phrases).
+`;
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,9 +41,8 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Bonjour ! Je suis Chronos, votre guide temporel. Quelle époque souhaitez-vous découvrir aujourd'hui ?",
-      sender: 'bot',
-      timestamp: new Date()
+      text: "Bonjour ! Je suis Chronos, votre guide temporel. Quelle époque souhaitez-vous explorer ?",
+      sender: 'bot'
     }
   ]);
   const [isTyping, setIsTyping] = useState(false);
@@ -35,60 +60,63 @@ export default function Chatbot() {
     if (!input.trim()) return;
 
     const userMessage: Message = {
-      id: messages.length + 1,
+      id: Date.now(),
       text: input,
-      sender: 'user',
-      timestamp: new Date()
+      sender: 'user'
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsTyping(true);
 
-    // Simulation of AI response (Placeholder for actual API integration)
-    setTimeout(() => {
-      let botResponseText = "Intéressant ! Dites-m'en plus.";
-      const lowerInput = userMessage.text.toLowerCase();
+    try {
+      let botResponseText = "";
 
-      if (lowerInput.includes('paris') || lowerInput.includes('1889')) {
-        botResponseText = "Ah, Paris en 1889 ! L'Exposition Universelle est magnifique. Vous pourrez monter dans la toute nouvelle Tour Eiffel. Souhaitez-vous voir les disponibilités ?";
-      } else if (lowerInput.includes('dino') || lowerInput.includes('cretace')) {
-        botResponseText = "Le Crétacé est une destination pour les aventuriers. Attention aux T-Rex ! Nous avons des capsules de sécurité renforcées. Cela vous tente ?";
-      } else if (lowerInput.includes('florence') || lowerInput.includes('art')) {
-        botResponseText = "Florence en 1504 est le berceau de la beauté. Vous pourriez croiser Michel-Ange finissant son David. Une époque inspirante.";
-      } else if (lowerInput.includes('prix') || lowerInput.includes('tarif')) {
-        botResponseText = "Nos voyages commencent à partir de 2499€. Le prix inclut le transport temporel, l'hébergement d'époque et l'assurance paradoxe.";
-      } else if (lowerInput.includes('bonjour') || lowerInput.includes('salut')) {
-        botResponseText = "Salutations voyageur ! Prêt à traverser les âges ?";
+      if (client) {
+        const response = await client.chat.complete({
+          model: "mistral-tiny",
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            ...messages.map(m => ({ 
+              role: m.sender === 'user' ? "user" as const : "assistant" as const, 
+              content: m.text 
+            })),
+            { role: "user", content: input }
+          ],
+        });
+        botResponseText = response.choices?.[0]?.message?.content?.toString() || "Désolé, j'ai eu un petit problème de condensateur de flux.";
+      } else {
+        // Fallback si pas de clé API
+        botResponseText = "Le système de communication temporel est hors ligne (Clé API manquante). Mais sachez que Paris 1889 est magnifique en cette saison !";
       }
 
-      const botMessage: Message = {
-        id: messages.length + 2,
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
         text: botResponseText,
-        sender: 'bot',
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, botMessage]);
+        sender: 'bot'
+      }]);
+    } catch (error) {
+      console.error("Erreur Chatbot:", error);
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        text: "Une perturbation temporelle m'empêche de répondre. Réessayez dans un instant.",
+        sender: 'bot'
+      }]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleSend();
+    }
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 flex flex-col items-end">
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="mb-4 w-80 md:w-96 bg-neutral-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[500px]"
+            className="mb-4 w-[calc(100vw-2rem)] sm:w-80 md:w-96 bg-neutral-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh] md:max-h-[500px]"
           >
-            {/* Header */}
             <div className="p-4 bg-gradient-to-r from-neutral-800 to-neutral-900 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gold-500 flex items-center justify-center">
@@ -99,60 +127,46 @@ export default function Chatbot() {
                   <p className="text-xs text-gold-500">Guide Temporel</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-white transition-colors"
-              >
+              <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[300px] bg-neutral-950/50">
               {messages.map((msg) => (
-                <div 
-                  key={msg.id} 
-                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div 
-                    className={`max-w-[80%] p-3 rounded-2xl text-sm ${
-                      msg.sender === 'user' 
-                        ? 'bg-gold-500 text-black rounded-tr-none' 
-                        : 'bg-neutral-800 text-gray-200 rounded-tl-none border border-white/5'
-                    }`}
-                  >
-                    {msg.text}
+                <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${
+                    msg.sender === 'user' ? 'bg-gold-500 text-black' : 'bg-neutral-800 text-gray-200 border border-white/5'
+                  }`}>
+                    {msg.sender === 'bot' ? (
+                      <div className="prose prose-invert prose-sm max-w-none">
+                        <ReactMarkdown>
+                          {msg.text}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      msg.text
+                    )}
                   </div>
                 </div>
               ))}
               {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-neutral-800 p-3 rounded-2xl rounded-tl-none border border-white/5 flex gap-1">
-                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></span>
-                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
-                  </div>
-                </div>
+                <div className="flex justify-start italic text-xs text-gray-500 animate-pulse">Chronos réfléchit...</div>
               )}
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
             <div className="p-4 bg-neutral-900 border-t border-white/10">
-              <div className="flex items-center gap-2 relative">
+              <div className="flex gap-2 relative">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Posez une question..."
-                  className="w-full bg-neutral-800 text-white placeholder-gray-500 rounded-full py-3 px-4 focus:outline-none focus:ring-1 focus:ring-gold-500/50 border border-transparent focus:border-gold-500/30 text-sm"
+                  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                  placeholder="Posez votre question..."
+                  className="w-full bg-neutral-800 text-white rounded-full py-2 px-4 focus:outline-none focus:ring-1 focus:ring-gold-500/50 text-sm"
                 />
-                <button 
-                  onClick={handleSend}
-                  disabled={!input.trim()}
-                  className="absolute right-2 p-2 bg-gold-500 text-black rounded-full hover:bg-gold-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button onClick={handleSend} disabled={!input.trim()} className="p-2 bg-gold-500 text-black rounded-full hover:bg-gold-600 disabled:opacity-50 cursor-pointer">
                   <Send className="w-4 h-4" />
                 </button>
               </div>
@@ -165,9 +179,9 @@ export default function Chatbot() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 bg-gold-500 hover:bg-gold-600 text-black rounded-full shadow-lg shadow-gold-500/20 flex items-center justify-center transition-all"
+        className="w-14 h-14 bg-gold-500 text-black rounded-full shadow-lg flex items-center justify-center cursor-pointer"
       >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
+        <MessageCircle />
       </motion.button>
     </div>
   );
