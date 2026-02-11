@@ -1,21 +1,29 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
-// Utiliser une image locale pour le background
-const heroBg = new URL('../../assets/images/paris169.png', import.meta.url).href;
+// Utiliser une vidéo locale pour le background
+const heroVideo = new URL('../../assets/videos/Paris.mp4', import.meta.url).href;
 
 export default function Hero() {
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image / Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ backgroundImage: `url("${heroBg}")` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-neutral-950"></div>
+      {/* Background Video / Overlay */}
+      <div className="absolute inset-0 z-0">
+        <video
+          src={heroVideo}
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden
+        />
+
+        {/* overlay entre la vidéo et le texte */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-neutral-950 z-10" />
       </div>
 
-      <div className="container mx-auto px-4 z-10 text-center">
+      <div className="container mx-auto px-4 z-20 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

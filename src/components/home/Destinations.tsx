@@ -25,7 +25,7 @@ const destinations = [
 		image: cretaceImg,
 		date: '-66M',
 		location: 'Pangée',
-		price: '3999€',
+		price: '6299€',
 	},
 	{
 		id: 3,
@@ -35,7 +35,7 @@ const destinations = [
 		image: florenceImg,
 		date: '1504',
 		location: 'Florence, Italie',
-		price: '2899€',
+		price: '3199€',
 	},
 ];
 
