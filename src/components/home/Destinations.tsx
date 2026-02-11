@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar } from 'lucide-react';
 
@@ -44,6 +45,25 @@ interface DestinationsProps {
 }
 
 export default function Destinations({ onBook }: DestinationsProps) {
+  const [isRoaring, setIsRoaring] = useState(false);
+  const roarTimeout = useRef<number | null>(null);
+
+  const handlePriceEnter = (title: string) => {
+    if (title === 'Crétacé') {
+      roarTimeout.current = window.setTimeout(() => {
+        setIsRoaring(true);
+      }, 2000);
+    }
+  };
+
+  const handlePriceLeave = () => {
+    if (roarTimeout.current) {
+      window.clearTimeout(roarTimeout.current);
+      roarTimeout.current = null;
+    }
+    setIsRoaring(false);
+  };
+
   return (
     <section id="destinations" className="py-12 md:py-20 bg-neutral-950">
       <div className="container mx-auto px-6">
@@ -75,7 +95,20 @@ export default function Destinations({ onBook }: DestinationsProps) {
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-2xl font-bold text-white group-hover:text-gold-500 transition-colors">{dest.title}</h3>
-                  <span className="text-gold-500 font-bold">{dest.price}</span>
+                  <div 
+                    onMouseEnter={() => handlePriceEnter(dest.title)}
+                    onMouseLeave={handlePriceLeave}
+                    className="relative"
+                  >
+                    <span className={`font-bold transition-colors duration-300 ${isRoaring && dest.title === 'Crétacé' ? 'text-red-500 text-lg animate-bounce' : 'text-gold-500'}`}>
+                      {isRoaring && dest.title === 'Crétacé' ? 'ROAAAR ! 🦖' : dest.price}
+                    </span>
+                    {isRoaring && dest.title === 'Crétacé' && (
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded whitespace-nowrap animate-pulse">
+                        Manger ou être mangé
+                      </div>
+                    )}
+                  </div>
                 </div>
                 
                 <div className="flex gap-4 text-sm text-gray-500 mb-4">
