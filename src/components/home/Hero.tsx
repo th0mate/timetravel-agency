@@ -1,6 +1,8 @@
-
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+
+// Utiliser une image locale pour le background
+const heroBg = new URL('../../assets/images/paris169.png', import.meta.url).href;
 
 export default function Hero() {
   return (
@@ -8,7 +10,7 @@ export default function Hero() {
       {/* Background Image / Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop")' }} // Paris like / atmospheric
+        style={{ backgroundImage: `url("${heroBg}")` }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-neutral-950"></div>
       </div>
