@@ -40,11 +40,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./timetravel-agency
+        working-directory: .
 
       - name: Build
         run: npm run build
-        working-directory: ./timetravel-agency
+        working-directory: .
         env:
           VITE_MISTRAL_API_KEY: ${{ secrets.VITE_MISTRAL_API_KEY }}
 
@@ -55,7 +55,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: './timetravel-agency/dist'
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
