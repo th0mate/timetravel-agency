@@ -1,9 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
-// Utiliser une image locale pour le background
-const heroBg = new URL('../../assets/images/paris169.png', import.meta.url).href;
-
 interface HeroProps {
     onBook: () => void;
 }
@@ -11,12 +8,19 @@ interface HeroProps {
 export default function Hero({ onBook }: HeroProps) {
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image / Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ backgroundImage: `url("${heroBg}")` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-neutral-950"></div>
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          {/* Vidéo atmosphérique style futuriste/temporel */}
+          <source src="https://cdn.pixabay.com/video/2023/10/20/185791-876356860_large.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-neutral-950"></div>
       </div>
 
       <div className="container mx-auto px-4 z-10 text-center">
@@ -49,7 +53,7 @@ export default function Hero({ onBook }: HeroProps) {
             </button>
             <a
               href="#destinations"
-              className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur-md transition-all border border-white/10 cursor-pointer"
+              className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur-md transition-all border border-white/10 cursor-pointer text-center"
             >
               En savoir plus
             </a>

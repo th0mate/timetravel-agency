@@ -39,5 +39,5 @@ Webapp moderne et immersive pour une agence de voyage temporel fictive, dévelop
 4.  Ouvrir `http://localhost:5173` dans votre navigateur.
 
 ## 📝 Crédits
-Projet réalisé dans le cadre du cours "Projet Supervisé IA M1/M2".
-Développé par [Votre Nom/Groupe] avec l'aide de l'IA.
+Projet réalisé dans le cadre du cours "Projet Supervisé IA M1".
+Développé par Lorick VERGNES, Yoann FERMAUD, Thomas LOYE avec l'aide de l'IA.

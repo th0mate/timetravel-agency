@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ArrowRight, RefreshCw, CheckCircle2 } from 'lucide-react';
 
+// Import des images locales
+import parisImg from '../../assets/images/paris916.png';
+import cretaceImg from '../../assets/images/cretace916.png';
+import florenceImg from '../../assets/images/florence916.png';
+
 const questions = [
   {
     id: 1,
@@ -36,17 +41,17 @@ const results = {
   paris: {
     title: "Paris 1889",
     description: "Vous êtes fait pour la Belle Époque ! L'Exposition Universelle et l'élégance parisienne n'attendent que vous.",
-    image: "https://images.unsplash.com/photo-1511739001486-6bfe10ce7859?q=80&w=1974&auto=format&fit=crop"
+    image: parisImg
   },
   cretace: {
     title: "Le Crétacé",
     description: "L'explorateur en vous a parlé. Préparez-vous à rencontrer les géants de la Terre dans une nature brute.",
-    image: "https://images.unsplash.com/photo-1518558997970-4dadc13c87e6?q=80&w=2070&auto=format&fit=crop"
+    image: cretaceImg
   },
   florence: {
     title: "Florence 1504",
     description: "Votre âme d'artiste s'épanouira dans la Florence de la Renaissance, aux côtés des plus grands génies.",
-    image: "https://images.unsplash.com/photo-1543429776-27719462d7c0?q=80&w=2070&auto=format&fit=crop"
+    image: florenceImg
   }
 };
 
