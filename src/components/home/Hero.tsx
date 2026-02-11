@@ -4,26 +4,29 @@ import { ArrowRight } from 'lucide-react';
 interface HeroProps {
     onBook: () => void;
 }
+const heroVideo = new URL('../../assets/videos/Paris.mp4', import.meta.url).href;
+
 
 export default function Hero({ onBook }: HeroProps) {
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Video */}
+      {/* Background Video / Overlay */}
       <div className="absolute inset-0 z-0">
         <video
-          autoPlay
-          loop
-          muted
-          playsInline
+          src={heroVideo}
           className="w-full h-full object-cover"
-        >
-          {/* Vidéo atmosphérique style futuriste/temporel */}
-          <source src="https://cdn.pixabay.com/video/2023/10/20/185791-876356860_large.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-neutral-950"></div>
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden
+        />
+
+        {/* overlay entre la vidéo et le texte */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-neutral-950 z-10" />
       </div>
 
-      <div className="container mx-auto px-4 z-10 text-center">
+      <div className="container mx-auto px-4 z-20 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
