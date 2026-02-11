@@ -2,9 +2,9 @@ import { motion } from 'framer-motion';
 import { MapPin, Calendar } from 'lucide-react';
 
 // Import des images locales
-import parisImg from '../../assets/images/paris916.png';
-import cretaceImg from '../../assets/images/cretace916.png';
-import florenceImg from '../../assets/images/florence916.png';
+import parisImg from '../../assets/images/paris169.png';
+import cretaceImg from '../../assets/images/cretace169.png';
+import florenceImg from '../../assets/images/florence169.png';
 
 const destinations = [
 	{
