@@ -1,5 +1,9 @@
 # TimeTravel Agency - Webapp Interactive
 
+[![Deploy to GitHub Pages](https://github.com/th0mate/timetravel-agency/actions/workflows/deploy.yml/badge.svg)](https://github.com/th0mate/timetravel-agency/actions/workflows/deploy.yml)
+
+🚀 **Site déployé :** [https://th0mate.github.io/timetravel-agency/](https://th0mate.github.io/timetravel-agency/)
+
 Webapp moderne et immersive pour une agence de voyage temporel fictive, développée avec React et l'assistance de l'IA.
 
 ## 🛠 Stack Technique
