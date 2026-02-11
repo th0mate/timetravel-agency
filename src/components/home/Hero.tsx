@@ -1,9 +1,11 @@
-
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
+// Utiliser une image locale pour le background
+const heroBg = new URL('../../assets/images/paris169.png', import.meta.url).href;
+
 interface HeroProps {
-  onBook: () => void;
+    onBook: () => void;
 }
 
 export default function Hero({ onBook }: HeroProps) {
@@ -12,7 +14,7 @@ export default function Hero({ onBook }: HeroProps) {
       {/* Background Image / Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop")' }} // Paris like / atmospheric
+        style={{ backgroundImage: `url("${heroBg}")` }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-neutral-950"></div>
       </div>
@@ -38,14 +40,14 @@ export default function Hero({ onBook }: HeroProps) {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-6">
-            <button 
+            <button
               onClick={onBook}
               className="px-8 py-4 bg-gold-500 hover:bg-gold-600 text-black font-bold rounded-full transition-all flex items-center gap-2 group cursor-pointer"
             >
               Réserver votre voyage
               <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </button>
-            <a 
+            <a
               href="#destinations"
               className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full backdrop-blur-md transition-all border border-white/10 cursor-pointer"
             >

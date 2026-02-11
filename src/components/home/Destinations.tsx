@@ -1,35 +1,42 @@
-
 import { motion } from 'framer-motion';
 import { MapPin, Calendar } from 'lucide-react';
 
+// Import des images locales
+import parisImg from '../../assets/images/paris916.png';
+import cretaceImg from '../../assets/images/cretace916.png';
+import florenceImg from '../../assets/images/florence916.png';
+
 const destinations = [
-  {
-    id: 1,
-    title: "Paris 1889",
-    description: "Vivez l'effervescence de l'Exposition Universelle et l'inauguration de la Tour Eiffel.",
-    image: "https://images.unsplash.com/photo-1511739001486-6bfe10ce7859?q=80&w=1974&auto=format&fit=crop", // Eiffel Tower vibe
-    date: "1889",
-    location: "Paris, France",
-    price: "2499€"
-  },
-  {
-    id: 2,
-    title: "Crétacé",
-    description: "Une aventure sauvage au milieu des géants de la préhistoire. Frissons garantis.",
-    image: "https://images.unsplash.com/photo-1518558997970-4dadc13c87e6?q=80&w=2070&auto=format&fit=crop", // Jungle/Nature vibe
-    date: "-66M",
-    location: "Pangée",
-    price: "3999€"
-  },
-  {
-    id: 3,
-    title: "Florence 1504",
-    description: "Rencontrez Michel-Ange et Léonard de Vinci au cœur de la Renaissance italienne.",
-    image: "https://images.unsplash.com/photo-1543429776-27719462d7c0?q=80&w=2070&auto=format&fit=crop", // Florence/Art vibe
-    date: "1504",
-    location: "Florence, Italie",
-    price: "2899€"
-  }
+	{
+		id: 1,
+		title: 'Paris 1889',
+		description:
+			"Vivez l'effervescence de l'Exposition Universelle et l'inauguration de la Tour Eiffel.",
+		image: parisImg,
+		date: '1889',
+		location: 'Paris, France',
+		price: '2499€',
+	},
+	{
+		id: 2,
+		title: 'Crétacé',
+		description:
+			"Une aventure sauvage au milieu des géants de la préhistoire. Frissons garantis.",
+		image: cretaceImg,
+		date: '-66M',
+		location: 'Pangée',
+		price: '3999€',
+	},
+	{
+		id: 3,
+		title: 'Florence 1504',
+		description:
+			"Rencontrez Michel-Ange et Léonard de Vinci au cœur de la Renaissance italienne.",
+		image: florenceImg,
+		date: '1504',
+		location: 'Florence, Italie',
+		price: '2899€',
+	},
 ];
 
 interface DestinationsProps {
@@ -82,11 +89,11 @@ export default function Destinations({ onBook }: DestinationsProps) {
                   </div>
                 </div>
 
-                <p className="text-gray-400 mb-6 line-clamp-2">
-                  {dest.description}
-                </p>
+								<p className="text-gray-400 mb-6 line-clamp-2">
+									{dest.description}
+								</p>
 
-                <button 
+                <button
                   onClick={() => onBook(dest.title)}
                   className="w-full py-3 bg-white/5 hover:bg-gold-500 hover:text-black text-white font-medium rounded-lg transition-all flex justify-center items-center gap-2 cursor-pointer"
                 >
