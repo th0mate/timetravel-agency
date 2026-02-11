@@ -36,13 +36,13 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: timetravel-agency/package-lock.json
+          cache-dependency-path: './timetravel-agency/package-lock.json'
       - name: Install dependencies
         run: npm install
-        working-directory: timetravel-agency
+        working-directory: ./timetravel-agency
       - name: Build
         run: npm run build
-        working-directory: timetravel-agency
+        working-directory: ./timetravel-agency
         env:
           VITE_MISTRAL_API_KEY: ${{ secrets.VITE_MISTRAL_API_KEY }}
       - name: Setup Pages
